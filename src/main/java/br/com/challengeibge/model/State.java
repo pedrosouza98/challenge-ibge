@@ -1,11 +1,20 @@
 package br.com.challengeibge.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
 public class State {
     private Long id;
 
-    private String sigla;
+    @JsonProperty("sigla")
+    private String initials;
 
-    private String nome;
+    @JsonProperty("nome")
+    private String name;
 
-    private Region regiao;
+    @JsonProperty("regiao")
+    private Region region;
 }

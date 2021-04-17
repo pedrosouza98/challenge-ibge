@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class City {
+public class MesoRegion {
 
     @JsonProperty("nome")
     private String name;
-
-    @JsonProperty("microrregiao")
-    private MicroRegion microRegion;
 }
