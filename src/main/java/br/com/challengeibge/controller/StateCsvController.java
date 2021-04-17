@@ -1,8 +1,7 @@
 package br.com.challengeibge.controller;
 
 import br.com.challengeibge.response.StateResponse;
-import br.com.challengeibge.service.GetDataOfStateService;
-import br.com.challengeibge.service.StateJsonService;
+import br.com.challengeibge.service.StateCsvService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +11,11 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-public class StateJsonController {
-    private final StateJsonService stateJsonService;
+public class StateCsvController {
+    private final StateCsvService stateCsvService;
 
-    @GetMapping("/states")
+    @GetMapping(value = "/csv/states", produces = "text/csv")
     public ResponseEntity getStates(){
-        List<StateResponse> states = stateJsonService.getListJson();
-        return ResponseEntity.ok(states);
-
+        return stateCsvService.getListCsv();
     }
-
 }
