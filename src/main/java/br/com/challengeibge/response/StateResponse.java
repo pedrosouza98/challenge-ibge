@@ -1,5 +1,6 @@
 package br.com.challengeibge.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,7 @@ public class StateResponse {
     private String nomeCidade;
     private String nomeMessoregiao;
     private String nomeFormatado;
+
+    @JsonIgnore
+    private Long idCidade;
 }

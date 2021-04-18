@@ -1,12 +1,12 @@
-package br.com.challengeibge.service;
+package br.com.challengeibge.service.state;
 
 import br.com.challengeibge.model.City;
 import br.com.challengeibge.model.State;
 import br.com.challengeibge.response.StateResponse;
+import br.com.challengeibge.service.city.GetCitiesService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class GetDataOfStateService {
     private final GetCitiesService getCitiesService;
     private final GetStateService getStateService;
 
-    public List<StateResponse> getStates(){
+    public List<StateResponse> getStatesWithCities(){
         List<StateResponse> responses = new ArrayList<>();
 
         // Pegar todos os estados.
@@ -35,6 +35,7 @@ public class GetDataOfStateService {
                         .nomeCidade(city.getName())
                         .nomeMessoregiao(city.getMicroRegion().getMesoRegion().getName())
                         .nomeFormatado(city.getName() + "/" + state.getInitials())
+                        .idCidade(city.getId())
                         .build();
 
                 responses.add(stateResponse);

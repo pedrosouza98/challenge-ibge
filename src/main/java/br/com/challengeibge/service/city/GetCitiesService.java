@@ -1,6 +1,6 @@
-package br.com.challengeibge.service;
+package br.com.challengeibge.service.city;
 
-import br.com.challengeibge.model.State;
+import br.com.challengeibge.model.City;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,22 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GetStateService {
-    private final String url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados";
+public class GetCitiesService {
+    private final String url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/";
 
-    public List<State> getAllState() {
+    public List<City> getCitiesFromUF(String uf){
+        String completeUrl = url + uf + "/municipios";
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(completeUrl, String.class);
 
-        List<State> states = new ArrayList<>();
+
+        List<City> cities = new ArrayList<>();
         try {
-            states = mapper.readValue(response.getBody(), new TypeReference<List<State>>() {
+            cities = mapper.readValue(response.getBody(), new TypeReference<List<City>>() {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-        return states;
+        return cities;
     }
 }

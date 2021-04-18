@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class City {
 
+    private Long id;
+
     @JsonProperty("nome")
     private String name;
 

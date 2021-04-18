@@ -1,8 +1,7 @@
 package br.com.challengeibge.controller;
 
 import br.com.challengeibge.response.StateResponse;
-import br.com.challengeibge.service.GetDataOfStateService;
-import br.com.challengeibge.service.StateJsonService;
+import br.com.challengeibge.service.state.json.StateJsonService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
