@@ -3,6 +3,7 @@ package br.com.challengeibge.service.state.csv;
 import br.com.challengeibge.response.StateResponse;
 import br.com.challengeibge.service.state.GetDataOfStateService;
 import lombok.AllArgsConstructor;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.core.io.InputStreamResource;
