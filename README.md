@@ -28,3 +28,6 @@ Permite também a busca de uma cidade filtrada pelo seu nome.
             "id" : 3550308
         }
       ```
+      
+## Diagrama de Classes
+Está em arquivo png no local challengeibge/diagram
