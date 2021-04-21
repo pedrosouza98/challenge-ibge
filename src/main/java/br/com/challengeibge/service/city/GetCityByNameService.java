@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @AllArgsConstructor
 @Service
 @Slf4j
-public class GetCityByNameService {
 
+public class GetCityByNameService {
     private final GetDataOfStateService getDataOfStateService;
 
     @Cacheable(value = "cities", key = "#cityName")
