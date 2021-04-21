@@ -1,24 +1,25 @@
-package br.com.challengeibge.service.state;
+package br.com.challengeibge.client;
 
 import br.com.challengeibge.model.State;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GetStateService {
+@AllArgsConstructor
+public class StateClient {
     private final String url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados";
+    private final RestTemplate restTemplate;
+    private final ObjectMapper mapper;
 
     public List<State> getAllState() {
-        RestTemplate restTemplate = new RestTemplate();
-        ObjectMapper mapper = new ObjectMapper();
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         List<State> states = new ArrayList<>();

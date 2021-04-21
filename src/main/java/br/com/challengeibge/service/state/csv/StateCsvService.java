@@ -1,15 +1,14 @@
 package br.com.challengeibge.service.state.csv;
 
+import br.com.challengeibge.constants.CsvHeader;
+import br.com.challengeibge.exception.CsvException;
 import br.com.challengeibge.response.StateResponse;
 import br.com.challengeibge.service.state.GetDataOfStateService;
 import lombok.AllArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -22,69 +21,51 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class StateCsvService {
 
     public final GetDataOfStateService getDataOfStateService;
 
-    public ResponseEntity getListCsv(){
+    public InputStreamResource getListCsv(){
+        log.info("init process of file csv");
         List<StateResponse> states = getDataOfStateService.getStatesWithCities();
-        String[] csvHeader = {
-                "idEstado", "siglaEstado", "regiaoNome", "nomeCidade", "nomeMesorregiao", "nomeFormatado"
-        };
+
         List<List<String>> csvBody = new ArrayList<>();
 
-        states.forEach(stateResponse -> {
-            csvBody.add(Arrays.asList(
-                    stateResponse.getIdEstado().toString(),
-                    stateResponse.getSiglaEstado(),
-                    stateResponse.getRegiaoNome(),
-                    stateResponse.getNomeCidade(),
-                    stateResponse.getNomeMessoregiao(),
-                    stateResponse.getNomeFormatado()
-            ));
-        });
+        states.forEach(stateResponse -> csvBody.add( getCsvBody(stateResponse) ));
 
         ByteArrayInputStream byteArrayOutputStream;
 
-        // closing resources by using a try with resources
-        // https://www.baeldung.com/java-try-with-resources
+        log.info("csv will be mount with " + states.size() +  " lines");
+
         try (
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                // defining the CSV printer
-                CSVPrinter csvPrinter = new CSVPrinter(
-                        new PrintWriter(out),
-                        // withHeader is optional
-                        CSVFormat.DEFAULT.withHeader(csvHeader)
-                );
+                CSVPrinter csvPrinter = new CSVPrinter( new PrintWriter(out), CSVFormat.DEFAULT.withHeader(CsvHeader.title) )
         ) {
-            // populating the CSV content
-            for (List<String> record : csvBody)
+            for (List<String> record : csvBody) {
                 csvPrinter.printRecord(record);
+            }
 
-            // writing the underlying stream
             csvPrinter.flush();
 
             byteArrayOutputStream = new ByteArrayInputStream(out.toByteArray());
+            log.info("csv was mounted with success");
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            log.error("Cannot process file csv because: " + e.getMessage());
+            throw new CsvException( e.getMessage() );
         }
 
-        InputStreamResource fileInputStream = new InputStreamResource(byteArrayOutputStream);
+        return new InputStreamResource(byteArrayOutputStream);
+    }
 
-        String csvFileName = "people.csv";
-
-        // setting HTTP headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + csvFileName);
-        // defining the custom Content-Type
-        headers.set(HttpHeaders.CONTENT_TYPE, "text/csv");
-
-        return new ResponseEntity<>(
-                fileInputStream,
-                headers,
-                HttpStatus.OK
+    private List<String> getCsvBody(StateResponse stateResponse) {
+        return Arrays.asList(
+                stateResponse.getIdEstado().toString(),
+                stateResponse.getSiglaEstado(),
+                stateResponse.getRegiaoNome(),
+                stateResponse.getNomeCidade(),
+                stateResponse.getNomeMessoregiao(),
+                stateResponse.getNomeFormatado()
         );
-
-
     }
 }
